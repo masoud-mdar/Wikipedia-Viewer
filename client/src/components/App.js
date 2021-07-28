@@ -28,6 +28,10 @@ const App = () => {
                     }
                 </ul>
             </div>
+            <div className="random-wrapper">
+                {/*<button name="random-btn" onClick={handleClick}>click here for a random article</button>*/}
+                <a href={`https://${lang}.wikipedia.org/wiki/Special:Random`}>click here for a random article</a>
+            </div>
         </div>
     )
 }
