@@ -81,9 +81,6 @@
 
 input:focus {
     outline: none;
-    width: 17vw;
-    height: 5vh;
-    border-radius: 25px;
     cursor: text;
 }
 
@@ -91,9 +88,24 @@ input:focus {
     width: 25px;
     height: 0%;
     position: absolute;
-    left: 30%;
+    left: 70%;
     border: 2px solid #ec6821;
     transform: rotate(45deg);
+    opacity: 0;
+    animation: apparition 1s ease-in-out forwards;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #ec6821;
+    position: absolute;
+    right: 5%;
+    top: 30%;
+    opacity: 0;
+    animation: apparition 1s ease-in-out forwards,
+    rotate 1s;
+    cursor: pointer;
 }
 
 .results-wrapper {
@@ -132,4 +144,31 @@ input:focus {
 
 .result-text {
     height: 10vh;
+}
+
+
+@keyframes apparition {
+    0%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 0.5;
+        
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+@keyframes rotate {
+    0%{
+        transform: rotate(0);
+    }
+    50%{
+        opacity: 0.5;
+        transform: rotate(180deg);
+    }
+    100%{
+        transform: rotate(0);
+    }
 }
