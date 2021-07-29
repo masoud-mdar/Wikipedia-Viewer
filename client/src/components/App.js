@@ -9,6 +9,9 @@ const App = () => {
     const [lang, setLang] = useState("en")
     const [searchInput, setSearchInput] = useState("")
     const [results, setResults] = useState([])
+    const [displayResult, setDisplayResult] = useState("none")
+    const [isSearchActive, setIsSearchActive] = useState(false)
+    const [displayLine, setDisplayLine] = useState("block")
 
 
     const langsArr = ["en", "fr", "de", "fa", "es", "oc", "ar"]
@@ -31,6 +34,7 @@ const App = () => {
         } else if (name === "go") {
 
             //const url = `https://${lang}.wikipedia.org/w/api.php`
+            setDisplayResult("block")
 
             let sendingData = [
                 lang,
@@ -39,6 +43,8 @@ const App = () => {
                     list: "search",
                     srsearch: searchInput,
                     srwhat: "text",
+                    srlimit: "10",
+                    srprop: "snippet",
                     format: "json"
                 }
             ]
@@ -47,64 +53,76 @@ const App = () => {
             axios.post(`${BASE_URL}/api/list`, sendingData).then(response => {
                 const {data} = response
 
-                //console.log(data)
+                console.log(data)
                 //console.log(data.query.search)
 
                 setResults(data.query.search)
+
             })
+        } else if (name === "search") {
+            setIsSearchActive(true)
+            setDisplayLine("none")
         }
     }
 
-    console.log(lang)
-    console.log(results)
+    //console.log(lang)
+    //console.log(results)
 
     return (
-        <div>
+        <div className="container">
 
-            <div className="lang-list">
-                <ul>
-                    {
-                        langsArr.map(item => {
-                            return <li key={item}><button name="lang-select" onClick={handleClick}>{item}</button></li>
-                        })
-                    }
-                </ul>
-            </div>
+            <div className="main-part">
+                <div className="lang-list">
+                    <ul>
+                        {
+                            langsArr.map(item => {
+                                return <li key={item}><button name="lang-select" onClick={handleClick}>{item}</button></li>
+                            })
+                        }
+                    </ul>
+                </div>
+                <div className="search-part">
+                    <div className="random-wrapper">
+                        {/*<button name="random-btn" onClick={handleClick}>click here for a random article</button>*/}
+                        <a href={`https://${lang}.wikipedia.org/wiki/Special:Random`} target="_blank" rel="noreferrer">Click here for a random article</a>
+                    </div>
 
-            <div className="random-wrapper">
-                {/*<button name="random-btn" onClick={handleClick}>click here for a random article</button>*/}
-                <a href={`https://${lang}.wikipedia.org/wiki/Special:Random`} target="_blank" rel="noreferrer">click here for a random article</a>
-            </div>
+                    <div className="search-wrapper">
+                        <div className="input-wrapper">
+                            <input name="search" onChange={handleChange} onClick={handleClick} value={searchInput} placeholder=""></input>
+                            <div className="line" style={{display: displayLine}}></div>
+                            <button name="go" onClick={handleClick}>click here</button>
+                        </div>
+                        <p>Click icon to search</p>
+                    </div>
+                </div>
 
-            <div className="search-wrapper">
-                <input name="search" onChange={handleChange} value={searchInput} placeholder=""></input>
-                <button name="go" onClick={handleClick}>click here</button>
-                <p>click icon to search</p>
-            </div>
+            
 
-            <div className="results-wrapper">
-                <ul className="results-list">
-                    {
-                        results.map(item => {
-                            return (
-                                <li key={item.pageid} className="list-item">
 
-                                    <a href={`https://${lang}.wikipedia.org/?curid=${item.pageid}`} target="_blank" rel="noreferrer">
-                                        <div className="result-wrapper">
-                                            <div className="result-title">
-                                                {item.title}
+                <div className="results-wrapper" style={{display: displayResult}}>
+                    <ul className="results-list">
+                        {
+                            results.map(item => {
+                                return (
+                                    <li key={item.pageid} className="list-item">
+
+                                        <a href={`https://${lang}.wikipedia.org/?curid=${item.pageid}`} target="_blank" rel="noreferrer">
+                                            <div className="result-wrapper">
+                                                <div className="result-title">
+                                                    <h3>{item.title}</h3>
+                                                </div>
+                                                <div className="result-text" dangerouslySetInnerHTML={{__html: item.snippet}}>
+                                                </div>
                                             </div>
-                                            <div className="result-text">
-                                                {item.snippet}
-                                            </div>
-                                        </div>
-                                    </a>
+                                        </a>
 
-                                </li>
-                            )
-                        })
-                    }
-                </ul>
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
     )
