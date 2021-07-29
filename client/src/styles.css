@@ -167,9 +167,14 @@ input:focus {
     justify-content: space-around;
 }
 
+.result-title {
+    padding-top: 3px;
+}
+
 .result-text {
     height: 10vh;
     margin-top: 5vh;
+    padding-bottom: 3px;
 }
 
 
