@@ -18,10 +18,11 @@ const App = () => {
     const [displayParag, setDisplayParag] = useState("block")
 
 
-    const langsArr = ["en", "fr", "de", "fa", "es", "oc", "ar"]
+    const langsArr = ["en", "fr", "oc", "fa", "es", "de", "ar"]
 
     const activeSearchStyle = {width: "17vw", height: "5vh", borderRadius: "25px"}
-    const marginStyle = {"marginTop": 20+"vh"}
+    const marginStyle = {marginTop: 30+"vh"}
+    const langColor = {color: "#ffffff"}
 
     useEffect(()=> {
         document.addEventListener("keydown", handleKeyPress)
@@ -45,7 +46,7 @@ const App = () => {
                     list: "search",
                     srsearch: searchInput,
                     srwhat: "text",
-                    srlimit: "10",
+                    srlimit: "15",
                     srprop: "snippet",
                     format: "json"
                 }
@@ -107,7 +108,7 @@ const App = () => {
                     <ul>
                         {
                             langsArr.map(item => {
-                                return <li key={item}><button name="lang-select" onClick={handleClick}>{item}</button></li>
+                                return <li key={item}><button name="lang-select" onClick={handleClick} className="lang-btn" style={item===lang ? langColor : {}}>{item}</button></li>
                             })
                         }
                     </ul>
