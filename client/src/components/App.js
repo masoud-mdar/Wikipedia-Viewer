@@ -21,19 +21,22 @@ const App = () => {
     const langsArr = ["en", "fr", "de", "fa", "es", "oc", "ar"]
 
     const activeSearchStyle = {width: "17vw", height: "5vh", borderRadius: "25px"}
+    const marginStyle = {"marginTop": 20+"vh"}
 
     useEffect(()=> {
         document.addEventListener("keydown", handleKeyPress)
 
+        return () => {document.removeEventListener("keydown", handleKeyPress)}
+
     })
 
     const handleKeyPress = (Event) => {
-        console.log(Event.keyCode)
+        //console.log(Event.keyCode)
         if (isSearchActive && searchInput && Event.keyCode === 13) {
-            
             //const url = `https://${lang}.wikipedia.org/w/api.php`
             setDisplayResult("block")
             setDisplayParag("none")
+            setResults([])
 
             let sendingData = [
                 lang,
@@ -52,10 +55,11 @@ const App = () => {
             axios.post(`${BASE_URL}/api/list`, sendingData).then(response => {
                 const {data} = response
 
-                console.log(data)
+                //console.log(data)
                 //console.log(data.query.search)
 
                 setResults(data.query.search)
+
 
             })
         }
@@ -98,7 +102,7 @@ const App = () => {
     return (
         <div className="container">
 
-            <div className="main-part">
+            <div className="main-part" style={displayResult==="block" ? marginStyle : {}}>
                 <div className="lang-list">
                     <ul>
                         {
