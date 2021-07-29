@@ -8,6 +8,7 @@ const App = () => {
 
     const [lang, setLang] = useState("en")
     const [searchInput, setSearchInput] = useState("")
+    const [results, setResults] = useState([])
 
 
     const langsArr = ["en", "fr", "de", "fa", "es", "oc", "ar"]
@@ -26,26 +27,36 @@ const App = () => {
 
         if (name === "lang-select") {
             setLang(innerHTML)
+
         } else if (name === "go") {
 
-            let sendingData = {
-                action: "opensearch",
-                search: searchInput,
-                limit: "5",
-                namespace: "0",
-                format: "json"
-            }
+            //const url = `https://${lang}.wikipedia.org/w/api.php`
+
+            let sendingData = [
+                lang,
+                {
+                    action: "query",
+                    list: "search",
+                    srsearch: searchInput,
+                    srwhat: "text",
+                    format: "json"
+                }
+            ]
 
 
             axios.post(`${BASE_URL}/api/list`, sendingData).then(response => {
                 const {data} = response
 
-                console.log(data)
+                //console.log(data)
+                //console.log(data.query.search)
+
+                setResults(data.query.search)
             })
         }
     }
 
     console.log(lang)
+    console.log(results)
 
     return (
         <div>
@@ -69,6 +80,31 @@ const App = () => {
                 <input name="search" onChange={handleChange} value={searchInput} placeholder=""></input>
                 <button name="go" onClick={handleClick}>click here</button>
                 <p>click icon to search</p>
+            </div>
+
+            <div className="results-wrapper">
+                <ul className="results-list">
+                    {
+                        results.map(item => {
+                            return (
+                                <li key={item.pageid} className="list-item">
+
+                                    <a href={`https://${lang}.wikipedia.org/?curid=${item.pageid}`} target="_blank" rel="noreferrer">
+                                        <div className="result-wrapper">
+                                            <div className="result-title">
+                                                {item.title}
+                                            </div>
+                                            <div className="result-text">
+                                                {item.snippet}
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                </li>
+                            )
+                        })
+                    }
+                </ul>
             </div>
         </div>
     )
